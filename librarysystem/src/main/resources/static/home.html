@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>書本借還室</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body>
+<div id="app" class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+        <h4 class="fw-bold">
+            所有書籍
+            <small class="text-muted fs-5">{{ bookCount }}</small>
+        </h4>
+        <p class="text-danger">{{ errorText }}</p>
+        <select class="form-select w-auto" v-model="sortOption" @change="sortBooks">
+            <option value="">預設</option>
+            <option value="newest">最新上架</option>
+        </select>
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4" v-if="books.length">
+        <div class="col" v-for="book in books" :key="book.inventoryId">
+            <div class="card h-100 text-center p-3">
+                <div style="height:100px; background:#e9ecef; display:flex; align-items:center; justify-content:center; font-size:2rem;">
+                    {{ book.bookname.charAt(0) }}
+                </div>
+                <div class="card-body">
+                    <h5>{{ book.bookname }}</h5>
+                    <p>作者：{{ book.author }}</p>
+                    <p class="text-truncate">{{ book.introduction }}</p>
+                    <p>
+                        <span v-if="book.status === 'STOCK'" class="text-success">可借</span>
+                        <span v-else class="text-danger">已借出</span>
+                    </p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <button v-if="book.status === 'STOCK'" class="btn btn-primary btn-sm"
+                                @click="borrow(book.inventoryId)">
+                            借書
+                        </button>
+                        <button v-else class="btn btn-secondary btn-sm" disabled>
+                            已借出
+                        </button>
+
+                        <button class="btn btn-success btn-sm" @click="returnBook(book.inventoryId)">
+                            還書
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="/js/home.js"></script>
+</body>
+</html>

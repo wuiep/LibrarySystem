@@ -1,5 +1,6 @@
 package com.example.librarySystem.controller;
 
+import com.example.librarySystem.dto.BookDTO;
 import com.example.librarySystem.dto.BorrowDTO;
 import com.example.librarySystem.dto.BorrowResponse;
 import com.example.librarySystem.entity.UserEntity;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,6 +28,15 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+
+    @GetMapping("/list")
+    public ResponseEntity<List<BookDTO>> listBooks(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String sortedBy) {
+
+        List<BookDTO> books = bookService.listBooks(keyword, sortedBy);
+        return ResponseEntity.ok(books);
+    }
 
     @PostMapping("/borrow")
     public ResponseEntity<?> borrowBook(@RequestBody Map<String, Long> body, HttpSession session) {
@@ -60,6 +71,8 @@ public class BookController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
 
 
 }

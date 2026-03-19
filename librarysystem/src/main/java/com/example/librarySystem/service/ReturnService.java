@@ -5,10 +5,7 @@ import com.example.librarySystem.entity.BorrowEntity;
 import com.example.librarySystem.entity.InventoryEntity;
 import com.example.librarySystem.entity.UserEntity;
 import com.example.librarySystem.enums.InventoryStatus;
-import com.example.librarySystem.repository.BookRepository;
-import com.example.librarySystem.repository.BorrowRepository;
-import com.example.librarySystem.repository.InventoryRepository;
-import com.example.librarySystem.repository.LoginRepository;
+import com.example.librarySystem.repository.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +14,7 @@ import java.time.LocalDateTime;
 
 @Service
 public class ReturnService {
-    @Autowired
-    private LoginRepository loginRepository;
+
 
     @Autowired
     private BookRepository bookRepository;
@@ -28,6 +24,9 @@ public class ReturnService {
 
     @Autowired
     private BorrowRepository borrowRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional
     public void returnBook(Long userId, Long inventoryId) {
@@ -41,7 +40,7 @@ public class ReturnService {
         }
 
         // 找使用者
-        UserEntity user = loginRepository.findById(userId)
+        UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("找不到使用者"));
 
         // 找書

@@ -2,6 +2,7 @@ package com.example.librarySystem.service;
 
 import com.example.librarySystem.entity.UserEntity;
 import com.example.librarySystem.repository.LoginRepository;
+import com.example.librarySystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +11,10 @@ import java.util.Optional;
 @Service
 public class LoginService {
 
-    private final LoginRepository loginRepository;
+    private  UserRepository userRepository;
     @Autowired
-    public LoginService(LoginRepository loginRepository) {
-        this.loginRepository = loginRepository;
+    public LoginService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public boolean authenticate(String phoneNumber, String password){
@@ -21,7 +22,7 @@ public class LoginService {
             return false;
         }//先判斷傳來的名字、密碼是否是NULL或是空值，若是就回傳false
 
-        Optional<UserEntity> optionalUser = loginRepository.findByPhoneNumber(phoneNumber);
+        Optional<UserEntity> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
 
         if (optionalUser.isPresent()) {  //檢查Optional內是否有值（是否找到對應帳號）
             UserEntity number = optionalUser.get();//如果有值，則取出Optional內的User物件
@@ -32,7 +33,7 @@ public class LoginService {
 
     }
     public UserEntity getUserByPhoneNumber(String phoneNumber) {
-        return loginRepository.findByPhoneNumber(phoneNumber)
+        return userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new RuntimeException("找不到使用者"));
     }
 

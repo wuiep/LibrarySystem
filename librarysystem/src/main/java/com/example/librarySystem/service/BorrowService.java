@@ -5,10 +5,7 @@ import com.example.librarySystem.entity.BorrowEntity;
 import com.example.librarySystem.entity.InventoryEntity;
 import com.example.librarySystem.entity.UserEntity;
 import com.example.librarySystem.enums.InventoryStatus;
-import com.example.librarySystem.repository.BookRepository;
-import com.example.librarySystem.repository.BorrowRepository;
-import com.example.librarySystem.repository.InventoryRepository;
-import com.example.librarySystem.repository.LoginRepository;
+import com.example.librarySystem.repository.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -22,8 +19,6 @@ import java.time.LocalDateTime;
 @Service
 public class BorrowService {
     //注入要用到的Repository介面
-    @Autowired
-    private LoginRepository loginRepository;
 
     @Autowired
     private BookRepository bookRepository;
@@ -33,6 +28,9 @@ public class BorrowService {
 
     @Autowired
     private BorrowRepository borrowRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Transactional //確保下單的整個流程在同一個事件，若某一步有出錯，就會全部回溯，不會產生半筆訂單
@@ -47,7 +45,7 @@ public class BorrowService {
         }
 
         //資料查詢商品ID跟使用者ID，找不到會拋出例外
-        UserEntity user = loginRepository.findById(userId)
+        UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("找不到指定的使用者"));
 
         InventoryEntity inventory = inventoryRepository.findById(inventoryId)
