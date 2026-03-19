@@ -1,0 +1,23 @@
+/* 主商品圖 */
+.product-image-main {
+    max-height: 500px;
+    object-fit: contain; /* 確保圖片不被裁切 */
+}
+
+/* 縮圖 */
+.thumbnail-image {
+    cursor: pointer;
+    border: 1px solid #dee2e6;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+}
+/* 游標停在縮圖與點按縮圖時(用來讓使用者辨識) */
+.thumbnail-image:hover, .thumbnail-image.active {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+.price-section {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #dc3545;
+}

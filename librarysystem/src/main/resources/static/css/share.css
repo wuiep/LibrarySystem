@@ -1,0 +1,54 @@
+body {
+    font-family: "Noto Sans TC", "Helvetica Neue", sans-serif;
+    padding-top: 90px;
+}
+
+.container {
+    overflow-y: auto;
+}
+
+.mail-icon-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* 定義通知點的樣式 */
+#unread-badge {
+    /* 圓點定位 */
+    position: absolute;
+    top: -2px;
+    right: -2px;
+
+    /* 圓點外觀 */
+    width: 8px;
+    height: 8px;
+    background-color: #036ad8;
+    border-radius: 50%;
+
+    /* 確保圓點在鈴鐺上方 */
+    z-index: 10;
+}
+
+.bg-unread {
+    background-color: #e9f2ff;
+}
+
+.form-select-big {
+    border-width: 3px;
+    font-size: 1.1rem;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.product-img {
+    width: 100%;          /* 保持滿版 */
+    height: 300px !important;   /* 固定高度*/
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.custom-mail-width {
+    min-width: 300px;
+    /* 確保寬度不會超過螢幕 */
+    max-width: 90vw;
+}

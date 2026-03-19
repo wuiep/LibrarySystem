@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首頁</title>
+    <!--載入share.css的cssFragment部分-->
+    <th:block th:replace="~{share :: cssFragment}"></th:block>
+    <!--載入share.css的jsFragment部分-->
+    <th:block th:replace="~{share :: jsFragment}"></th:block>
+    <!--載入home.js，主要邏輯-->
+    <script th:src="@{/js/home.js}"></script>
+</head>
+<body>
+<!--網頁最上方要放的-->
+<div th:replace="~{share :: navbar}"></div>
+<div class="container mt-4">
+
+    <div id="app" class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+            <h4 class="fw-bold">所有商品 <small class="text-muted fs-5">{{ productCount }}</small></h4>
+            <p class="text-danger">{{ errorText }}</p>
+            <select class="form-select w-auto" v-model="sortOption" @change="sortProducts">
+                <option value="">預設</option>
+                <option value="priceAsc">價格由低到高</option>
+                <option value="priceDesc">價格由高到低</option>
+                <option value="newest">最新上架</option>
+            </select>
+        </div>
+
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <div class="col" v-for="product in products" :key="product.id">
+                <div class="card h-100 text-center p-3">
+                    <!-- 如果沒有圖片，用商品名稱首字母作為 placeholder -->
+                    <div class="card-placeholder mb-3"
+                         style="height:100px; background-color:#e9ecef; display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:bold;">
+                        {{ product.name.charAt(0) }}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">${{ product.price }}</p>
+                        <button v-if="isLoggedIn" class="btn btn-primary btn-sm" @click="borrow(product.id)">借書</button>
+                        <button v-else class="btn btn-secondary btn-sm" disabled title="請先登入">借書</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="product-list-container" class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+    </div>
+    <span id="search-keyword" class="d-none" th:data-keyword="${keyword}"></span>
+</div>
+
+</body>
+</html>
