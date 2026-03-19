@@ -9,6 +9,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+/**
+ * 庫存物件
+ */
 @Entity
 @ToString
 @Getter
@@ -28,7 +31,6 @@ public class InventoryEntity {
     @CreationTimestamp
     @Column(name = "store_time", nullable = false, updatable = false)
     private LocalDateTime storeTime;
-
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

@@ -1,21 +1,23 @@
 package com.example.librarySystem.service;
 
-import com.example.librarySystem.dto.BorrowDTO;
+import com.example.librarySystem.dto.BorrowDto;
 import com.example.librarySystem.entity.BorrowEntity;
 import com.example.librarySystem.entity.InventoryEntity;
 import com.example.librarySystem.entity.UserEntity;
 import com.example.librarySystem.enums.InventoryStatus;
 import com.example.librarySystem.repository.*;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.example.librarySystem.repository.BorrowRepository;
+import com.example.librarySystem.repository.InventoryRepository;
+import com.example.librarySystem.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-
+/**
+ * 借閱功能相關 service
+ */
 @Service
 public class BorrowService {
     //注入要用到的Repository介面
@@ -24,19 +26,26 @@ public class BorrowService {
     private BookRepository bookRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private InventoryRepository inventoryRepository;
 
     @Autowired
     private BorrowRepository borrowRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    /**
+     * 新增庫存
+     * (@Transactional：確保下單的整個流程在同一個事件，若某一步有出錯，就會全部回溯，不會產生任何訂單)
+     *
+     * @param userId      借閱人使用者 ID
+     * @param inventoryId 被借閱的書籍 ID
+     * @return 建立成功的借閱紀錄物件 (DTO)
+     */
+    @Transactional
+    public BorrowDto addRecord(Long userId, Long inventoryId) {
 
-
-    @Transactional //確保下單的整個流程在同一個事件，若某一步有出錯，就會全部回溯，不會產生半筆訂單
-    public BorrowDTO addRecord(Long userId, Long inventoryId) {
-
-        //驗證每個欄位不能為null或不合法，找不到會拋出例外
+        // 驗證每個欄位不能為null或不合法，找不到會拋出例外
         if (userId == null) {
             throw new IllegalArgumentException("userId 不能為空");
         }
@@ -44,13 +53,14 @@ public class BorrowService {
             throw new IllegalArgumentException("inventoryId 不能為空");
         }
 
-        //資料查詢商品ID跟使用者ID，找不到會拋出例外
+        // 資料查詢商品ID跟使用者ID，找不到會拋出例外
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("找不到指定的使用者"));
 
         InventoryEntity inventory = inventoryRepository.findById(inventoryId)
                 .orElseThrow(() -> new RuntimeException("找不到書籍"));
 
+        // 檢查藏書狀態
         if (inventory.getStatus() != InventoryStatus.STOCK) {
             throw new RuntimeException("此書不可借");
         }
@@ -60,7 +70,7 @@ public class BorrowService {
             throw new RuntimeException("此書已被借出");
         }
 
-        //建立訂單Entity，將前端資料對應到資料庫欄位
+        // 建立借閱紀錄Entity，將前端資料對應到資料庫欄位
         BorrowEntity record = new BorrowEntity();
         record.setUser(user);
         record.setInventory(inventory);
@@ -72,12 +82,12 @@ public class BorrowService {
 
         record = borrowRepository.save(record);
 
-        //把資料庫的訂單資料先轉成前端可用的格式(DTO)
-        BorrowDTO response = new BorrowDTO();
+        // 把資料庫的借閱紀錄資料先轉成前端可用的格式(DTO)
+        BorrowDto response = new BorrowDto();
         response.setUser(record.getUser());
         response.setBook(record.getInventory().getBook());
         response.setBorrowTime(record.getBorrowTime());
-        return response;//回傳完整訂單資料給前端
+        return response;// 回傳完整借閱紀錄資料給前端
     }
 
 }

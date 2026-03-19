@@ -1,17 +1,22 @@
 package com.example.librarySystem.service;
 
-import com.example.librarySystem.entity.BookEntity;
 import com.example.librarySystem.entity.BorrowEntity;
 import com.example.librarySystem.entity.InventoryEntity;
 import com.example.librarySystem.entity.UserEntity;
 import com.example.librarySystem.enums.InventoryStatus;
 import com.example.librarySystem.repository.*;
+import com.example.librarySystem.repository.BorrowRepository;
+import com.example.librarySystem.repository.InventoryRepository;
+import com.example.librarySystem.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+/**
+ * 歸還功能相關 service
+ */
 @Service
 public class ReturnService {
 
@@ -20,14 +25,20 @@ public class ReturnService {
     private BookRepository bookRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private InventoryRepository inventoryRepository;
 
     @Autowired
     private BorrowRepository borrowRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
+    /**
+     * 歸還書籍
+     *
+     * @param userId      借閱者
+     * @param inventoryId 書籍編號
+     */
     @Transactional
     public void returnBook(Long userId, Long inventoryId) {
 
@@ -55,6 +66,7 @@ public class ReturnService {
         // 設定歸還時間
         record.setReturnTime(LocalDateTime.now());
 
+        // 設定藏書狀態
         inventory.setStatus(InventoryStatus.STOCK);
 
         // 存回資料庫

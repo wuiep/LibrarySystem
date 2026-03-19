@@ -3,6 +3,9 @@ package com.example.librarySystem.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 借閱 Response 物件
+ */
 @Getter
 @Setter
 public class BorrowResponse {

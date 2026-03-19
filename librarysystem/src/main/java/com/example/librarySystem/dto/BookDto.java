@@ -1,14 +1,12 @@
 package com.example.librarySystem.dto;
 
 import com.example.librarySystem.enums.InventoryStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class BookDTO {
+public class BookDto {
     private String ISBN;            // 書籍 ID
     private String bookname;        // 書名
     private String author;          // 作者

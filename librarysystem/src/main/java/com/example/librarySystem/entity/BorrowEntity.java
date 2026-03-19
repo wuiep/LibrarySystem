@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * 借閱紀錄物件
+ */
 @Entity
 @Getter
 @Setter
@@ -21,7 +24,6 @@ public class BorrowEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-
     @ManyToOne
     @JoinColumn(name = "inventory_id")
     private InventoryEntity inventory;
@@ -31,7 +33,6 @@ public class BorrowEntity {
 
     @Column(name = "return_time")
     private LocalDateTime returnTime;
-
 
 }
 
